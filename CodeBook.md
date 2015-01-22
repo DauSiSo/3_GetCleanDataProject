@@ -6,75 +6,34 @@ output: html_document
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
 
-trainSub 
-    <br><ol>Training Subject Data File</ol>
-    
-trainTime 
-    <br><ol>Training Time Variables Data File (561 Variables/Columns)</ol>
+The tidyData.txt is a summary of means of 66 data variables captured while 30 subjects doing 6 different activities Therefore, the file contains 68 columns and 180 rows (30 subjects * 6 activities). 
 
-trainActivity 
-    <br><ol>Training Activity Data File</ol>
-    
-trainData 
-    <br><ol>Combined data set of trainSub, trainTime, and trainActivity (total of 563 columns) </ol>
-    
-testSub
-    <br><ol>Testing Subject Data File</ol>
-    
-testTime
-    <br><ol>Testing Time Variables Data File (561 Variables/Columns)</ol>
-    
-testActivity 
-    <br><ol>Training Activity Data File</ol>
-    
-testData
-    <br><ol>Combined data set of testSub, testTime, and testActivity (total of 563 columns)</ol>
-    
-theData
-    <br><ol>Combined of training data (trainData) and testing data (testData)</ol>
-    
-timeLabel
-    <br><ol>Labels for Time Variables (561 labels for 561 variables)</ol>
+First Column - Subject 
+Second Column - Activity
+The rest of the Columns - 66 data varaibles related to each subject/activity. 
 
-<br>
-Assign meaningful labels to each variables/columns
-```{r}
-    names(theData)[1] <- c("Subject")
-    names(theData)[2] <- c("Activity")
-    names(theData)[3:563] <- timeLabel[,2]
-``` 
+These are the column names in the data file:
 
-<br>
-Finds the variable names containing string 'mean' or 'std'
-```{r}
-    meanCol <- timeLabel[grep("mean()",timeLabel$V2,fixed=TRUE),]
-    stdCol <- timeLabel[grep("std()",timeLabel$V2,fixed=TRUE),]
-```
-
-<br>
-Requirement 2: Extracts only the measurements on the mean and standard deviation for each measurement.
-```{r}
-subsetData <- theData[,c("Subject","Activity",meanCol$V2,stdCol$V2)]
-``` 
-
-<br>
-Read in activity labels
-```{r}
-activityLabel <- read.table("./activity_labels.txt", header=FALSE, stringsAsFactors=FALSE)
-``` 
-
-<br>
-Requirement 3: Uses descriptive activity names to name the activities in the data set
-```{r}
-finalData <- merge(subsetData,activityLabel, by.x="Activity", by.y="V1", all=TRUE )
-finalData$Activity <- finalData$V2
-finalData <- subset(finalData, select=-c(V2))
-``` 
-
-<br>
-Requirement 5: From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
-```{r}
-sumData<- ddply(finalData, .(Subject, Activity), numcolwise(mean))
-write.table(sumData, "tidyData.txt", row.name=FALSE, sep = ",")
-```     
-    
+ [1] "Subject"                     "Activity"                    "tBodyAcc-mean()-X"          
+ [4] "tBodyAcc-mean()-Y"           "tBodyAcc-mean()-Z"           "tGravityAcc-mean()-X"       
+ [7] "tGravityAcc-mean()-Y"        "tGravityAcc-mean()-Z"        "tBodyAccJerk-mean()-X"      
+[10] "tBodyAccJerk-mean()-Y"       "tBodyAccJerk-mean()-Z"       "tBodyGyro-mean()-X"         
+[13] "tBodyGyro-mean()-Y"          "tBodyGyro-mean()-Z"          "tBodyGyroJerk-mean()-X"     
+[16] "tBodyGyroJerk-mean()-Y"      "tBodyGyroJerk-mean()-Z"      "tBodyAccMag-mean()"         
+[19] "tGravityAccMag-mean()"       "tBodyAccJerkMag-mean()"      "tBodyGyroMag-mean()"        
+[22] "tBodyGyroJerkMag-mean()"     "fBodyAcc-mean()-X"           "fBodyAcc-mean()-Y"          
+[25] "fBodyAcc-mean()-Z"           "fBodyAccJerk-mean()-X"       "fBodyAccJerk-mean()-Y"      
+[28] "fBodyAccJerk-mean()-Z"       "fBodyGyro-mean()-X"          "fBodyGyro-mean()-Y"         
+[31] "fBodyGyro-mean()-Z"          "fBodyAccMag-mean()"          "fBodyBodyAccJerkMag-mean()" 
+[34] "fBodyBodyGyroMag-mean()"     "fBodyBodyGyroJerkMag-mean()" "tBodyAcc-std()-X"           
+[37] "tBodyAcc-std()-Y"            "tBodyAcc-std()-Z"            "tGravityAcc-std()-X"        
+[40] "tGravityAcc-std()-Y"         "tGravityAcc-std()-Z"         "tBodyAccJerk-std()-X"       
+[43] "tBodyAccJerk-std()-Y"        "tBodyAccJerk-std()-Z"        "tBodyGyro-std()-X"          
+[46] "tBodyGyro-std()-Y"           "tBodyGyro-std()-Z"           "tBodyGyroJerk-std()-X"      
+[49] "tBodyGyroJerk-std()-Y"       "tBodyGyroJerk-std()-Z"       "tBodyAccMag-std()"          
+[52] "tGravityAccMag-std()"        "tBodyAccJerkMag-std()"       "tBodyGyroMag-std()"         
+[55] "tBodyGyroJerkMag-std()"      "fBodyAcc-std()-X"            "fBodyAcc-std()-Y"           
+[58] "fBodyAcc-std()-Z"            "fBodyAccJerk-std()-X"        "fBodyAccJerk-std()-Y"       
+[61] "fBodyAccJerk-std()-Z"        "fBodyGyro-std()-X"           "fBodyGyro-std()-Y"          
+[64] "fBodyGyro-std()-Z"           "fBodyAccMag-std()"           "fBodyBodyAccJerkMag-std()"  
+[67] "fBodyBodyGyroMag-std()"      "fBodyBodyGyroJerkMag-std()" 

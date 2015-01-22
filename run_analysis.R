@@ -1,6 +1,8 @@
 library(reshape2)
 library(plyr)
 
+setwd("C:/My_Data/Coursera/DataScience/3_GetCleanData/Project/UCI HAR Dataset")
+
 #Read in training data for subject, activity, and data set, 
 #and make one data.frame
 setwd("./train")
@@ -48,5 +50,5 @@ names(finalData)
 #Requirement 5: From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 sumData<- ddply(finalData, .(Subject, Activity), numcolwise(mean))
 write.table(sumData, "tidyData.txt", row.name=FALSE, sep = ",")
-
+names(sumData)
 
